@@ -18,12 +18,13 @@ async function startServer() {
     const app = express();
     const server = http.createServer(app);
 
+    // Configurer le middleware CORS
+    app.use(cors());
 
     // Configurer Socket.IO
-    // setupSocket(server);
-    
-    // Middleware
-    app.use(cors());
+    setupSocket(server);
+
+    // Middleware supplémentaires
     app.use(express.json());
 
     // Connect to MongoDB
@@ -72,7 +73,7 @@ async function startServer() {
 
     // Start the server
     const port = process.env.PORT || 5000;
-    app.listen(port, () => {
+    server.listen(port, () => {
         console.log(`Server is running on port ${port}`);
     });
 }

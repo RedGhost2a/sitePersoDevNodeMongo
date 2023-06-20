@@ -1,8 +1,15 @@
 const socketIo = require('socket.io');
-// const ChatMessageService = require('/_service/chatMessageService');
+const ChatMessageService = require('../_service/chatMessageService');
 
 function setupSocket(server) {
-    const io = socketIo(server);
+    const io = socketIo(server, {
+        cors: {
+            origin: 'http://localhost:4200',
+            methods: ['GET', 'POST'],
+            allowedHeaders: ['Content-Type', 'Authorization'],
+            credentials: true
+        }
+    });
 
     io.on('connection', (socket) => {
         console.log('a user connected');
