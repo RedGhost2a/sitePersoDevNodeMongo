@@ -2,6 +2,9 @@ const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 
 const UserSchema = new Schema({
+    token:{
+        type:String
+    },
     username: {
         type: String,
         required: true,

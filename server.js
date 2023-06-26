@@ -3,6 +3,7 @@ const cors = require('cors');
 const { connect } = require('./db');
 const articleRoutes = require('./_routes/articlesRoutes');
 const contactRoutes = require('./_routes/contactRoutes');
+const chatMessageRoutes = require('./_routes/chatMessageRoutes');
 const http = require('http');
 const setupSocket = require('./_script/socket');
 const AdminBro = require('admin-bro')
@@ -10,6 +11,8 @@ const AdminBroExpress = require('@admin-bro/express')
 const AdminBroMongoose = require('@admin-bro/mongoose')
 const Article = require('./_models/article');
 const Contact = require('./_models/contact');
+const UserRoutes = require('./_routes/userRoutes');
+const TranslatedArticle = require("./_models/translatedArticle");
 
 // We have to tell AdminBro to use mongoose adapter
 AdminBro.registerAdapter(AdminBroMongoose)
@@ -39,6 +42,7 @@ async function startServer() {
     const adminBro = new AdminBro({
         resources: [
             { resource: Article, options: { /* Resource options */ } },
+            { resource: TranslatedArticle, options: { /* Resource options */ } },
             { resource: Contact, options: { /* Resource options */ } },
         ],
         rootPath: '/admin',
@@ -70,6 +74,8 @@ async function startServer() {
     // Routes
     app.use('/articles', articleRoutes);
     app.use('/contact', contactRoutes);
+    app.use('/users', UserRoutes);
+    app.use('/messages', chatMessageRoutes);
 
     // Start the server
     const port = process.env.PORT || 5000;

@@ -7,6 +7,8 @@ const ArticleSchema = new mongoose.Schema({
     urlToImage:String,
     url:String,
     author: String,
+    keyword:Array,
+    bigram:Array,
     publishedAt: Date,
 });
 

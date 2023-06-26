@@ -26,6 +26,16 @@ const deleteUser = async (id) => {
     return User.findByIdAndDelete(id);
 }
 
+const getAllUsers = async () => {
+    try {
+        return await User.find();
+    } catch (error) {
+        console.error('Erreur lors de la récupération des utilisateurs:', error);
+        throw error;
+    }
+};
+
+
 const loginUser = async (username, password) => {
     // Recherchez l'utilisateur dans la base de données
     const user = await User.findOne({ username: username });
@@ -35,14 +45,29 @@ const loginUser = async (username, password) => {
         return null;
     }
 
-    // Générez un JWT et retournez-le
+
     const token = jwt.sign({ id: user._id }, secretKey, { expiresIn: '1h' });
-    return token;
+    const userObj = user.toObject();
+    userObj.token = token;
+    // Supprimez le mot de passe de l'objet user avant de le renvoyer
+    delete userObj.password;
+
+    // Créez un nouvel objet pour supprimer le "token" enveloppe externe
+    let responseObj = {...userObj};
+    console.log(userObj)
+    return responseObj;
+
+
 }
+
+
+
+
 module.exports = {
     createUser,
     getUser,
     updateUser,
     deleteUser,
-    loginUser
+    loginUser,
+    getAllUsers
 };

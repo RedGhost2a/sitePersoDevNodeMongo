@@ -9,6 +9,16 @@ const getUser = async (req, res) => {
     const user = await UserService.getUser(req.params.id);
     return res.status(200).json(user);
 }
+const getAllUser = async (req, res) => {
+    try {
+        const users = await UserService.getAllUsers();
+        res.status(200).json(users);
+    } catch (error) {
+        console.error('Erreur lors de la récupération des utilisateurs:', error);
+        res.status(500).json({ message: 'Erreur lors de la récupération des utilisateurs' });
+    }
+};
+
 
 const updateUser = async (req, res) => {
     if (req.user.id !== req.params.id) {
@@ -24,13 +34,13 @@ const deleteUser = async (req, res) => {
 }
 
 const loginUser = async (req, res) => {
-    const token = await UserService.loginUser(req.body.username, req.body.password);
+    const user = await UserService.loginUser(req.body.username, req.body.password);
 
-    if (!token) {
+    if (!user) {
         return res.status(401).json({ message: 'Invalid username or password' });
     }
 
-    return res.status(200).json({ token: token });
+    return res.status(200).json({ user });
 }
 
 module.exports={
@@ -38,6 +48,7 @@ module.exports={
     getUser,
     updateUser,
     deleteUser,
-    loginUser
+    loginUser,
+    getAllUser
 
 }
